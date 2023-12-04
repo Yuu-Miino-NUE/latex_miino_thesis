@@ -1,0 +1,149 @@
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{miino_thesis}[2023/12/04 v1.0.0 Thesis class of Miino's Lab.]
+
+\RequirePackage{newtxtext,newtxmath}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage[twoside]{fancyhdr}
+\fancypagestyle{plainhead}{
+    \fancyhf{}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyfoot[C]{\thepage}
+    \fancyhead[LE,RO]{\rightmark}
+}
+\renewcommand{\chaptermark}[1]{\markboth{第\ \normalfont\thechapter\ 章~~#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyhead[L]{\leftmark}
+    \fancyhead[R]{\rightmark}
+    \fancyfoot[C]{\thepage}
+}
+\pagestyle{plain}
+
+\RequirePackage[colorlinks,allcolors={black},urlcolor={cyan}]{hyperref}
+
+\newcommand{\supervisorname}{指導教員}
+\renewcommand{\abstractname}{要 旨}
+
+\newcommand{\doctype}[1]{\gdef\@doctype{#1}}%
+\newcommand{\@doctype}{\@latex@warning@no@line{No \noexpand\doctype given}}
+\newcommand{\organization}[1]{\gdef\@organization{#1}}%
+\newcommand{\@organization}{\@latex@warning@no@line{No \noexpand\organization given}}
+\newcommand{\supervisor}[1]{\gdef\@supervisor{#1}}%
+\newcommand{\@supervisor}{\@latex@warning@no@line{No \noexpand\supervisor given}}
+
+\if@titlepage
+\renewcommand{\maketitle}{%
+\begin{titlepage}%
+    \let\footnotesize\small
+    \let\footnoterule\relax
+    \let\footnote\thanks
+    \null\vfil
+    \if@slide
+    {\footnotesize \@date}%
+    \begin{center}
+        \mbox{} \\[1zw]
+        \large
+        {\maybeblue\hrule height0\jsc@mpt depth2\jsc@mpt\relax}\par
+        \jsc@smallskip
+        \@title
+        \jsc@smallskip
+        {\maybeblue\hrule height0\jsc@mpt depth2\jsc@mpt\relax}\par
+        \vfill
+        {\small \@author}%
+    \end{center}
+    \else % <-- Started updating by Y. Miino
+    \vskip 60\jsc@mpt
+    \begin{center}%
+    {\large \@doctype \par}%
+    \vskip 3em%
+    {\LARGE\bfseries \@title \par}%
+    \vskip 3em%
+    {\large
+        \lineskip .75em
+        \begin{tabular}[t]{c}%
+        \@author
+        \end{tabular}\par}%
+    \vskip 1.5em
+    {\large \@date \par}%
+    \vskip 3.5em
+    {\large \supervisorname\quad \@supervisor \par}%
+    \vfill
+    {\large \@organization \par}%
+    \end{center}%
+    \fi % <-- Finished updating by Y. Miino
+    \par
+    \@thanks\vfil\null
+\end{titlepage}%
+\setcounter{footnote}{0}%
+\global\let\thanks\relax
+\global\let\maketitle\relax
+\global\let\@thanks\@empty
+\global\let\@author\@empty
+\global\let\@date\@empty
+\global\let\@title\@empty
+\global\let\@doctype\@empty % <-- Started updating by Y. Miino
+\global\let\@organization\@empty
+\global\let\@supervisor\@empty
+\global\let\supervisor\relax
+\global\let\organization\relax
+\global\let\doctype\relax % <-- Finished updating by Y. Miino
+\global\let\title\relax
+\global\let\author\relax
+\global\let\date\relax
+\global\let\and\relax
+}%
+\else
+\renewcommand{\maketitle}{\par
+\begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\advance\leftskip 3zw
+    \parindent 1zw\noindent
+    \llap{\@textsuperscript{\normalfont\@thefnmark}\hskip0.3zw}##1}%
+    \if@twocolumn
+    \ifnum \col@number=\@ne
+        \@maketitle
+    \else
+        \twocolumn[\@maketitle]%
+    \fi
+    \else
+    \newpage
+    \global\@topnum\z@  % Prevents figures from going at top of page.
+    \@maketitle
+    \fi
+    \plainifnotempty
+    \@thanks
+\endgroup
+\setcounter{footnote}{0}%
+\global\let\thanks\relax
+\global\let\maketitle\relax
+\global\let\@thanks\@empty
+\global\let\@author\@empty
+\global\let\@date\@empty
+\global\let\@title\@empty
+\global\let\title\relax
+\global\let\author\relax
+\global\let\date\relax
+\global\let\and\relax
+}
+\def\@maketitle{%
+\newpage\null
+\vskip 2em
+\begin{center}%
+    \let\footnote\thanks
+    {\LARGE \@title \par}%
+    \vskip 1.5em
+    {\large
+    \lineskip .5em
+    \begin{tabular}[t]{c}%
+        \@author
+    \end{tabular}\par}%
+    \vskip 1em
+    {\large \@date}%
+\end{center}%
+\par\vskip 1.5em
+\ifvoid\@abstractbox\else\centerline{\box\@abstractbox}\vskip1.5em\fi
+}
+\fi
