@@ -64,14 +64,17 @@
     %\vskip 3em%
     %{\large \@date \par}%
     \vfill
-    {\large \supervisorname\quad \@supervisor \par}%
-    \vskip 2.5em
     {\large \@organization \par}%
     \vskip 1.5em
     {\large
         \lineskip .75em
         \begin{tabular}[t]{c}%
         \@author
+        \end{tabular}\par}%
+    \vskip 2.5em
+    {\large
+        \begin{tabular}[t]{ll}%
+        \@supervisor
         \end{tabular}\par}%
     \end{center}%
     \fi % <-- Finished updating by Y. Miino
