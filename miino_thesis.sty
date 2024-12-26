@@ -4,6 +4,7 @@
 \setlength{\footskip}{35pt}
 
 \RequirePackage{newtxtext,newtxmath}
+\RequirePackage{tcolorbox}
 \RequirePackage{graphicx}
 \RequirePackage{booktabs}
 \RequirePackage{fancyhdr}
@@ -25,7 +26,6 @@
 
 \RequirePackage[colorlinks,allcolors={black},urlcolor={cyan}]{hyperref}
 
-\newcommand{\supervisorname}{指導教員}
 \renewcommand{\abstractname}{要 旨}
 
 \newcommand{\doctype}[1]{\gdef\@doctype{#1}}%
@@ -35,8 +35,31 @@
 \newcommand{\supervisor}[1]{\gdef\@supervisor{#1}}%
 \newcommand{\@supervisor}{\@latex@warning@no@line{No \noexpand\supervisor given}}
 
-\if@titlepage
-\renewcommand{\maketitle}{%
+\newif\if@seihon
+\newif\if@fukuhon
+\newcommand{\seihon}{seihon}
+\newcommand{\fukuhon}{fukuhon}
+\newcommand{\seihonname}{正 本}
+\newcommand{\fukuhonname}{副 本}
+\newcommand{\frontcover}[1][]{%
+    \ifx#1\empty %
+        % 何もしない
+    \else
+        \ifx#1\seihon
+            \@seihontrue
+        \else\ifx#1\fukuhon
+            \@fukuhontrue
+        \else
+            \PackageWarning{mystyle}{Invalid argument for \string\frontcover: #1}
+        \fi\fi
+    \fi
+}
+\DeclareOption{seihon}{\@seihontrue}
+\DeclareOption{fukuhon}{\@fukuhontrue}
+\ExecuteOptions{}
+\ProcessOptions\relax
+
+\newcommand{\miino@maketitle}{%
 \begin{titlepage}%
     \let\footnotesize\small
     \let\footnoterule\relax
@@ -56,7 +79,19 @@
         {\small \@author}%
     \end{center}
     \else % <-- Started updating by Y. Miino
-    \vskip 60\jsc@mpt
+    \if@seihon%
+    \begin{minipage}[t][60\jsc@mpt]{\linewidth}%
+        \raggedleft\begin{tcolorbox}[colframe=black, colback=white, width=22mm, sharp corners, halign=center, boxsep=1mm]\Large\seihonname\end{tcolorbox}%
+    \end{minipage}%
+    \else%
+        \if@fukuhon%
+        \begin{minipage}[t][60\jsc@mpt]{\linewidth}%
+            \raggedleft\begin{tcolorbox}[colframe=black, colback=white, width=22mm, sharp corners, halign=center, boxsep=1mm]\Large\fukuhonname\end{tcolorbox}%
+        \end{minipage}%
+        \else%
+        \vskip 60\jsc@mpt%
+        \fi%
+    \fi%
     \begin{center}%
     {\large \@doctype \par}%
     \vskip 3em%
@@ -81,6 +116,20 @@
     \par
     \@thanks\vfil\null
 \end{titlepage}%
+}
+
+\if@titlepage
+\renewcommand{\maketitle}{%
+\if@seihon
+\miino@maketitle
+\@seihonfalse
+\fi
+\if@fukuhon
+\miino@maketitle
+\@fukuhonfalse
+\fi
+\miino@maketitle
+\setcounter{page}{1}%
 \setcounter{footnote}{0}%
 \global\let\thanks\relax
 \global\let\maketitle\relax
