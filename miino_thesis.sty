@@ -35,6 +35,7 @@
 \newcommand{\supervisor}[1]{\gdef\@supervisor{#1}}%
 \newcommand{\@supervisor}{\@latex@warning@no@line{No \noexpand\supervisor given}}
 
+\newif\if@cover
 \newif\if@seihon
 \newif\if@fukuhon
 \newcommand{\seihon}{seihon}
@@ -42,8 +43,9 @@
 \newcommand{\seihonname}{正 本}
 \newcommand{\fukuhonname}{副 本}
 \newcommand{\frontcover}[1][]{%
+    \@covertrue
     \ifx#1\empty %
-        % 何もしない
+        \relax
     \else
         \ifx#1\seihon
             \@seihontrue
@@ -80,12 +82,12 @@
     \end{center}
     \else % <-- Started updating by Y. Miino
     \if@seihon%
-    \begin{minipage}[t][60\jsc@mpt]{\linewidth}%
-        \raggedleft\begin{tcolorbox}[colframe=black, colback=white, width=22mm, sharp corners, halign=center, boxsep=1mm]\Large\seihonname\end{tcolorbox}%
-    \end{minipage}%
+        \noindent\begin{minipage}[t][60\jsc@mpt]{\linewidth}%
+            \raggedleft\begin{tcolorbox}[colframe=black, colback=white, width=22mm, sharp corners, halign=center, boxsep=1mm]\Large\seihonname\end{tcolorbox}%
+        \end{minipage}%
     \else%
         \if@fukuhon%
-        \begin{minipage}[t][60\jsc@mpt]{\linewidth}%
+        \noindent\begin{minipage}[t][60\jsc@mpt]{\linewidth}%
             \raggedleft\begin{tcolorbox}[colframe=black, colback=white, width=22mm, sharp corners, halign=center, boxsep=1mm]\Large\fukuhonname\end{tcolorbox}%
         \end{minipage}%
         \else%
@@ -120,12 +122,10 @@
 
 \if@titlepage
 \renewcommand{\maketitle}{%
-\if@seihon
+\if@cover
 \miino@maketitle
+\@coverfalse
 \@seihonfalse
-\fi
-\if@fukuhon
-\miino@maketitle
 \@fukuhonfalse
 \fi
 \miino@maketitle
