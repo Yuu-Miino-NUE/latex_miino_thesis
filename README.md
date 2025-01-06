@@ -3,6 +3,7 @@
 - 卒論・修論用 LaTeX style
 
 ## Overleaf
+設定の参考：[Qiita | Overleafを使った日本語論文の作成](https://qiita.com/fujino-fpu/items/d92d185da730e25743cb) 
 
 - latexmkrc の記載内容
 
