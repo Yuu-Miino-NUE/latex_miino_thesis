@@ -1,0 +1,95 @@
+\NeedsTeXFormat{pLaTeX2e}
+\ProvidesPackage{miino_summary}[2025/01/16 v1.0.0 Thesis Summary class of Miino's Lab.]
+
+\setlength{\footskip}{35pt}
+
+\RequirePackage{newtxtext,newtxmath}
+\RequirePackage{tcolorbox}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage[top=25mm, bottom=30mm,left=30mm,right=30mm]{geometry}
+\RequirePackage[colorlinks,allcolors={black},urlcolor={cyan}]{hyperref}
+\usepackage[noabbrev]{cleveref}
+\crefformat{chapter}{第#2#1#3章}
+\crefformat{section}{#2#1#3節}
+\crefformat{subsection}{#2#1#3節}
+\crefname{figure}{図}{図}
+\crefname{table}{表}{表}
+\crefname{equation}{式}{式}
+\crefname{appendix}{付録}{付録}
+\newcommand{\crefrangeconjunction}{--}
+\newcommand{\crefpairconjunction}{, }
+\newcommand{\crefmiddleconjunction}{, }
+\newcommand{\creflastconjunction}{, }
+
+\newcommand{\organization}[1]{\gdef\@organization{#1}}%
+\newcommand{\@organization}{\@latex@warning@no@line{No \noexpand\organization given}}
+\newcommand{\supervisor}[1]{\gdef\@supervisor{#1}}%
+\newcommand{\@supervisor}{\@latex@warning@no@line{No \noexpand\supervisor given}}
+
+% Add keywords to the summary
+\newcommand{\keywordsname}{キーワード}
+\RequirePackage{ifthen}
+\newcommand{\keywords}[1]{\def\@keywords{#1}}
+\def\@keywords{}
+\newcommand{\printkeywords}{
+\ifthenelse{\equal{\@keywords}{}}{}%
+{\noindent\large\keywordsname: \@keywords\par}%
+}
+
+\RequirePackage{array}
+\newcolumntype{L}{>{\raggedright\arraybackslash\hspace{-\tabcolsep}}l}
+
+\bibliographystyle{junsrt}
+
+
+\renewcommand{\maketitle}{\par
+\begingroup
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\rlap{\@textsuperscript{\normalfont\@thefnmark}}}%
+    \long\def\@makefntext##1{\advance\leftskip 3zw
+    \parindent 1zw\noindent
+    \llap{\@textsuperscript{\normalfont\@thefnmark}\hskip0.3zw}##1}%
+    \twocolumn[\@maketitle]%
+    \plainifnotempty
+\endgroup
+\setcounter{footnote}{0}%
+\global\let\maketitle\relax
+\global\let\@author\@empty
+\global\let\@title\@empty
+\global\let\title\relax
+\global\let\author\relax
+\global\let\and\relax
+}
+\def\@maketitle{%
+\newpage\null
+\vskip 2em
+\begin{center}%
+    {\LARGE \@title \par}%
+    \vskip 2.5em
+    {\large
+    \lineskip .5em
+    \begin{minipage}[c]{.6\hsize}%
+        \begin{flushleft}
+            \begin{tabular}[t]{L}%
+                \@organization
+            \end{tabular}\par%
+            \begin{tabular}[t]{L}%
+                \@author
+            \end{tabular}%
+        \end{flushleft}
+    \end{minipage}%
+    \begin{minipage}[c]{.4\hsize}%
+        \begin{flushright}
+            \begin{tabular}[t]{ll}%
+                \@supervisor
+            \end{tabular}%
+        \end{flushright}
+    \end{minipage}\par}%
+    % \vskip 1em
+    % {\large \@date}%
+\end{center}%
+% Add keywords if they are given
+\printkeywords
+\par\vskip 1.5em
+}
